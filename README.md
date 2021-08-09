@@ -1,0 +1,2 @@
+# RaccBot
+bad discord bot
