@@ -62,6 +62,9 @@ public class Clear extends ListenerAdapter {
 							event.getChannel().sendMessage("no permissions sadge. Must have Manage Messages in order to delete messages.").queue();
 							LOGGER.warn("{} [{}] - bot does not have manage messages permissions.", event.getAuthor().getAsTag(), args[1]);
 						}
+					} catch(Exception e) {
+						LOGGER.warn("{} [{}] - unknown exception occured", event.getAuthor().getAsTag(), args[1]);
+						e.printStackTrace();
 					}
 				}
 			}
