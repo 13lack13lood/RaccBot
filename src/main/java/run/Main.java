@@ -21,6 +21,7 @@ import music.MusicJoin;
 import music.MusicLeave;
 import music.MusicPlay;
 import music.MusicVolume;
+import music.SetMusicChannel;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -79,8 +80,9 @@ public class Main {
 		// Music commands
 		builder.addEventListeners(new MusicJoin()); // Join voice channel command
 		builder.addEventListeners(new MusicLeave()); // Leave voice channel command
-		builder.addEventListeners(new MusicPlay()); // play music command
+		builder.addEventListeners(new MusicPlay()); // Play music command
 		builder.addEventListeners(new MusicVolume()); // Change music volume
+		builder.addEventListeners(new SetMusicChannel()); // Set the music commands chanenl
 		LOGGER.info("All commands loaded.");
 		// Create the new instance and login
 		builder.build();

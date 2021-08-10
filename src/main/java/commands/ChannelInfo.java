@@ -40,7 +40,7 @@ public class ChannelInfo extends ListenerAdapter {
 					LOGGER.info("{} [{}] - help", event.getAuthor().getAsTag(), args[1]);
 				} else {
 					// Get channel from message
-					GuildChannel channel = search(event.getMessage().getGuild().getChannels(), Tool.combine(args, 2));
+					GuildChannel channel = Tool.searchChannel(event.getMessage().getGuild().getChannels(), Tool.combine(args, 2));
 					if(channel != null) {
 						// Message Embed
 						EmbedBuilder info = new EmbedBuilder();
@@ -85,19 +85,7 @@ public class ChannelInfo extends ListenerAdapter {
 		
 		return members;
 	}
-	// Search through the list to find the channel
-	public GuildChannel search(List<GuildChannel> list, String pattern) {
-		if(list.isEmpty())
-			return null;
-		// Loop through all the channels
-		for(GuildChannel c : list) {
-			if(c.getName().toLowerCase().contains(pattern.toLowerCase())) {
-				return c;
-			}
-		}
-		
-		return null;
-	}
+
 	// Get all permission overrides for denied
 	public String permissionsDenied(List<PermissionOverride> list) {
 		String permissions = "";

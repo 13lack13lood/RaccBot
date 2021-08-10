@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import tools.BotConfig;
+import tools.Tool;
 
 public class MusicLeave extends ListenerAdapter {
 	private static Logger LOGGER = LoggerFactory.getLogger(MusicLeave.class);
@@ -18,7 +19,7 @@ public class MusicLeave extends ListenerAdapter {
 		String[] args = event.getMessage().getContentRaw().split("\\s+");
 		// Check for prefix
 		if(args[0].equalsIgnoreCase(BotConfig.getData("prefix"))) {
-			if(args[1].equalsIgnoreCase("leave")) {
+			if(args[1].equalsIgnoreCase("leave") && Tool.checkMusicCommandChannel(event)) {
 				Member self = event.getGuild().getSelfMember();
 				GuildVoiceState voiceState = self.getVoiceState();
 				// Check if bot is already in voice channel

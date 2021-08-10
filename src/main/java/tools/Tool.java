@@ -1,10 +1,17 @@
 package tools;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Tool {
 	public static String BOTCONFIG = "./src/main/resources/settings.botconfig";
+	public static String MUSICCHANNELS = "./src/main/resources/musicchannels.botconfig";
 	// Method to generate random color
 	public static Color randomColor() {
 		Random random = new Random();
@@ -53,5 +60,64 @@ public class Tool {
 		long minutes = seconds / 60;
 		seconds -= (minutes * 60);
 		return Long.toString(minutes) + ":" + Long.toString(seconds);
+	}
+	// Search through the list to find the channel
+	public static GuildChannel searchChannel(List<GuildChannel> list, String pattern) {
+		if(list.isEmpty())
+			return null;
+		// Loop through all the channels
+		for(GuildChannel c : list) {
+			if(c.getName().toLowerCase().contains(pattern.toLowerCase())) {
+				return c;
+			}
+		}
+		
+		return null;
+	}
+	// Channel search with channelid
+	// Search through the list to find the role
+	public static Role searchRole(List<Role> list, String pattern) {
+		if(list.isEmpty())
+			return null;
+		// Loop through all the channels
+		for(Role r : list) {
+			if(r.getName().toLowerCase().contains(pattern.toLowerCase())) {
+				return r;
+			}
+		}
+		
+		return null;
+	}
+	// Search through the list to find the role
+	public static Role searchRole(List<Role> list, String pattern, int number) {
+		if(list.isEmpty())
+			return null;
+		// Loop through all the channels
+		List<Role> results = new ArrayList<Role>();
+		for(Role r : list) {
+			if(r.getName().toLowerCase().contains(pattern.toLowerCase())) {
+				results.add(r);
+			}
+		}
+		// Find the role with given index
+		if(!results.isEmpty()) {
+			// Check if index > # of results returned
+			if(number > results.size()) {
+				return results.get(results.size() - 1);
+			} else if(number > 0) {
+				return results.get(number - 1);
+			}
+		}
+
+		return null;
+	}
+	
+	public static boolean checkMusicCommandChannel(GuildMessageReceivedEvent event) {
+		long serverid = event.getGuild().getIdLong();
+		if(BotConfig.getMusicChannels(serverid) != null && event.getChannel().getIdLong() != BotConfig.getMusicChannels(serverid)) {
+			event.getChannel().sendMessage("You can only use music commands in " + event.getGuild().getGuildChannelById(BotConfig.getMusicChannels(serverid)).getName()).queue();
+			return false;
+		}
+		return true;
 	}
 }

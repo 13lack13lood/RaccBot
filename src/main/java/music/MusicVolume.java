@@ -19,7 +19,7 @@ public class MusicVolume extends ListenerAdapter {
 		String[] args = event.getMessage().getContentRaw().split("\\s+");
 		// Check for prefix
 		if(args[0].equalsIgnoreCase(BotConfig.getData("prefix"))) {
-			if(args[1].equalsIgnoreCase("volume")) {
+			if(args[1].equalsIgnoreCase("volume") && Tool.checkMusicCommandChannel(event)) {
 				if(args.length < 3) {
 					// Usage embed
 					EmbedBuilder usage = new EmbedBuilder();

@@ -20,7 +20,7 @@ public class MusicPlay extends ListenerAdapter {
 		String[] args = event.getMessage().getContentRaw().split("\\s+");
 		// Check for prefix
 		if(args[0].equalsIgnoreCase(BotConfig.getData("prefix"))) {
-			if(args[1].equalsIgnoreCase("play")) {
+			if(args[1].equalsIgnoreCase("play") && Tool.checkMusicCommandChannel(event)) {
 				if(args.length < 3) {
 					// Usage embed
 					EmbedBuilder usage = new EmbedBuilder();
@@ -51,6 +51,7 @@ public class MusicPlay extends ListenerAdapter {
 						} else {
 							try {
 								PlayerManager.getInstance().loadAndPlay(channel, args[2]);
+								LOGGER.info("{} [{}] song:", event.getAuthor().getAsTag(), args[1], Tool.combine(args, 2));
 							} catch(Exception e) {
 								event.getChannel().sendMessage("bruh that aint a link").queue();
 							}

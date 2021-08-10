@@ -46,9 +46,9 @@ public class RoleInfo extends ListenerAdapter {
 						Role role;
 						// Check if the user requests which role to return
 						if(args.length > 3 && Tool.isNumber(args[args.length - 1])) {
-							role = search(event.getGuild().getRoles(), Tool.combine(args, 2, args.length - 1), Integer.parseInt(args[args.length - 1]));
+							role = Tool.searchRole(event.getGuild().getRoles(), Tool.combine(args, 2, args.length - 1), Integer.parseInt(args[args.length - 1]));
 						} else {
-							role = search(event.getGuild().getRoles(), Tool.combine(args, 2));
+							role = Tool.searchRole(event.getGuild().getRoles(), Tool.combine(args, 2));
 						}
 						// Check if the query returned null
 						if(role != null) {
@@ -118,41 +118,4 @@ public class RoleInfo extends ListenerAdapter {
 		}
 		return members;
 	}
-	// Search through the list to find the role
-	public Role search(List<Role> list, String pattern) {
-		if(list.isEmpty())
-			return null;
-		// Loop through all the channels
-		for(Role r : list) {
-			if(r.getName().toLowerCase().contains(pattern.toLowerCase())) {
-				return r;
-			}
-		}
-		
-		return null;
-	}
-	// Search through the list to find the role
-	public Role search(List<Role> list, String pattern, int number) {
-		if(list.isEmpty())
-			return null;
-		// Loop through all the channels
-		List<Role> results = new ArrayList<Role>();
-		for(Role r : list) {
-			if(r.getName().toLowerCase().contains(pattern.toLowerCase())) {
-				results.add(r);
-			}
-		}
-		// Find the role with given index
-		if(!results.isEmpty()) {
-			// Check if index > # of results returned
-			if(number > results.size()) {
-				return results.get(results.size() - 1);
-			} else if(number > 0) {
-				return results.get(number - 1);
-			}
-		}
-
-		return null;
-	}
-	
 }
