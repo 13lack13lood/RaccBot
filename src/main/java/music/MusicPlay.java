@@ -26,7 +26,8 @@ public class MusicPlay extends ListenerAdapter {
 					EmbedBuilder usage = new EmbedBuilder();
 					usage.setColor(Tool.randomColor());
 					usage.setTitle("Play Music Command");
-					usage.setDescription("Usage: `" + BotConfig.getData("prefix") + " play [youtube link]`");					
+					usage.setDescription("Usage: `" + BotConfig.getData("prefix") + " play [youtube link]`");
+					usage.addField("Tip:", "Bot must be in a voice channel first, use `-r join`", false);
 					// Send the embed
 					event.getChannel().sendMessageEmbeds(usage.build()).queue();
 					// Clear builder to save resources

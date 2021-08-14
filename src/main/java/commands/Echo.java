@@ -77,7 +77,7 @@ public class Echo extends ListenerAdapter {
 							}
 							LOGGER.info("{} [{}]", event.getAuthor().getAsTag(), args[1]);
 						}
-					} catch(NumberFormatException e) {
+					} catch(Exception e) {
 						event.getChannel().sendMessage("how many times?").queue();
 						LOGGER.warn("{} [{}] - attempted to use the command without entering a number.", event.getAuthor().getAsTag(), args[1]);
 					}

@@ -20,6 +20,7 @@ import commands.UserInfo;
 import music.MusicJoin;
 import music.MusicLeave;
 import music.MusicPlay;
+import music.MusicQueue;
 import music.MusicVolume;
 import music.SetMusicChannel;
 import net.dv8tion.jda.api.JDABuilder;
@@ -83,6 +84,7 @@ public class Main {
 		builder.addEventListeners(new MusicPlay()); // Play music command
 		builder.addEventListeners(new MusicVolume()); // Change music volume
 		builder.addEventListeners(new SetMusicChannel()); // Set the music commands chanenl
+		builder.addEventListeners(new MusicQueue()); // Get the music queue
 		LOGGER.info("All commands loaded.");
 		// Create the new instance and login
 		builder.build();
