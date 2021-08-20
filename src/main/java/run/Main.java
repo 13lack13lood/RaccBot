@@ -10,19 +10,26 @@ import commands.Clear;
 import commands.Coin;
 import commands.Dice;
 import commands.Echo;
-import commands.Help;
-import commands.Invite;
+import commands.MiscHelp;
+import commands.MiscInvite;
+import commands.MusicJoin;
+import commands.MusicLeave;
+import commands.MusicLoop;
+import commands.MusicNowPlaying;
+import commands.MusicPause;
+import commands.MusicPlay;
+import commands.MusicQueue;
+import commands.MusicResume;
+import commands.MusicSkip;
+import commands.MusicStop;
+import commands.MusicVolume;
 import commands.RoleInfo;
 import commands.ServerChannels;
 import commands.ServerInfo;
 import commands.ServerRoles;
+import commands.MiscShutdown;
+import commands.MiscSetMusicChannel;
 import commands.UserInfo;
-import music.MusicJoin;
-import music.MusicLeave;
-import music.MusicPlay;
-import music.MusicQueue;
-import music.MusicVolume;
-import music.SetMusicChannel;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -65,8 +72,10 @@ public class Main {
 		LOGGER.info("Status and activity set.");
 		// Ready listener
 		builder.addEventListeners(new Listener());
+		// Shutdown command
+		builder.addEventListeners(new MiscShutdown());
 		// Add commands
-		builder.addEventListeners(new Help()); // Help command
+		builder.addEventListeners(new MiscHelp()); // Help command
 		builder.addEventListeners(new Clear()); // Clear command
 		builder.addEventListeners(new Echo()); // Echo command
 		builder.addEventListeners(new Dice()); // Dice command
@@ -77,14 +86,20 @@ public class Main {
 		builder.addEventListeners(new ServerRoles()); // ServerRoles command
 		builder.addEventListeners(new ChannelInfo()); // ChannelInfo command
 		builder.addEventListeners(new RoleInfo()); // RoleInfo command
-		builder.addEventListeners(new Invite()); // Invite command
+		builder.addEventListeners(new MiscInvite()); // Invite command
 		// Music commands
 		builder.addEventListeners(new MusicJoin()); // Join voice channel command
 		builder.addEventListeners(new MusicLeave()); // Leave voice channel command
 		builder.addEventListeners(new MusicPlay()); // Play music command
 		builder.addEventListeners(new MusicVolume()); // Change music volume
-		builder.addEventListeners(new SetMusicChannel()); // Set the music commands chanenl
+		builder.addEventListeners(new MiscSetMusicChannel()); // Set the music commands chanenl
 		builder.addEventListeners(new MusicQueue()); // Get the music queue
+		builder.addEventListeners(new MusicPause()); // Music pause command
+		builder.addEventListeners(new MusicStop()); // Stop Music command
+		builder.addEventListeners(new MusicResume()); // Resume music command
+		builder.addEventListeners(new MusicSkip()); // Skip music command
+		builder.addEventListeners(new MusicNowPlaying()); // Now playing music command
+		builder.addEventListeners(new MusicLoop()); // Music Loop command
 		LOGGER.info("All commands loaded.");
 		// Create the new instance and login
 		builder.build();

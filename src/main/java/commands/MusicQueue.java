@@ -1,4 +1,4 @@
-package music;
+package commands;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import music.GuildMusicManager;
+import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -49,20 +51,35 @@ public class MusicQueue extends ListenerAdapter {
 						try {
 							GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
 							int page = Integer.parseInt(args[2]);
-							List<AudioTrack> queue = getQueue(manager.scheduler.getQueue(), page);
+							// Throw exception if user gives page < 1
+							if(page < 1)
+								throw new NumberFormatException();
+							// Throw exception if queue is empty
+							if(manager.scheduler.getQueue().isEmpty())
+								throw new NullPointerException();
+							
+							List<IndexedAudioTrack> queue = getQueue(manager.scheduler.getQueue(), page);
+							
 							EmbedBuilder output = new EmbedBuilder();
 							output.setColor(Tool.randomColor());
 							output.setTitle("Music Queue Page " + page + " (Total: " + manager.scheduler.getQueue().size() + ")");
+							
 							AudioTrack currentTrack = manager.audioPlayer.getPlayingTrack();
 							output.setDescription("**Current Track**:\n" + currentTrack.getInfo().title + "\nBy: *" + currentTrack.getInfo().author + "*\nLength: *" + Tool.convertTime(currentTrack.getInfo().length) + "*\t Duration: *" + Tool.convertTime(currentTrack.getPosition()) + "*");
-							for(AudioTrack t : queue) {
-								output.addField(t.getInfo().title, "By: *" + t.getInfo().author + "*\nLength: *" + Tool.convertTime(t.getInfo().length) + "*", false);
+							
+							for(IndexedAudioTrack t : queue) {
+								output.addField("(" + t.getIndex() + ") " + t.getTrack().getInfo().title, "By: *" + t.getTrack().getInfo().author + "*\nLength: *" + Tool.convertTime(t.getTrack().getInfo().length) + "*", false);
 							}
+							
 							event.getChannel().sendMessageEmbeds(output.build()).queue();
-							LOGGER.info("{} [{}]", event.getAuthor().getAsTag(), args[1], args[2]);
+							output.clear();
+							LOGGER.info("{} [{}] - page {}", event.getAuthor().getAsTag(), args[1], args[2], page);
 						} catch (NumberFormatException e) { // Catch error if user does not give integer
-							event.getChannel().sendMessage("bruh give me an integer.").queue();
+							event.getChannel().sendMessage("bruh give me an integer > 0.").queue();
 							LOGGER.warn("{} [{}] - attempted to change the volume with a non-integer", event.getAuthor().getAsTag(), args[1]);
+						} catch (NullPointerException e) {
+							event.getChannel().sendMessage("Queue is empty.").queue();
+							LOGGER.info("{} [{}] - empty queue", event.getAuthor().getAsTag(), args[1], args[2]);
 						}
 					}
 				}
@@ -70,32 +87,49 @@ public class MusicQueue extends ListenerAdapter {
 		}
     }
     
-    private static List<AudioTrack> getQueue(BlockingQueue<AudioTrack> queue, int page) {
+    private static List<IndexedAudioTrack> getQueue(BlockingQueue<AudioTrack> queue, int page) {
     	Iterator<AudioTrack> it = queue.iterator();
-    	int target = page * 10;
-    	List<AudioTrack> list = new ArrayList<AudioTrack>();
-    	// TODO completely redo this, just put all the tracks from the blockingqueue into the list, current method is trash
-    	if(target <= queue.size()) {
-    		while(it.hasNext() && target > 10) {
-    			it.next();
-    			target--;
-    		}
-    		while(it.hasNext() && target > 0) {
-    			list.add(it.next());
-    			target--;
-    		}
-    	} else {
-    		target = (queue.size() / 10) * 10;
-    		while(it.hasNext() && target > queue.size() - (queue.size() / 10) * 10) {
-    			it.next();
-    			target--;
-    		}
-    		while(it.hasNext() && target > 0) {
-    			list.add(it.next());
-    			target--;
-    		}
+    	List<IndexedAudioTrack> list = new ArrayList<IndexedAudioTrack>();
+    	int index = 1;
+    	while(it.hasNext()) {
+    		list.add(new IndexedAudioTrack(index++, it.next()));
     	}
     	
+    	int start = (page - 1) * 10;
+    	int end = start + 10;
+    	int size = list.size();
+    	
+    	if(start > list.size()) {
+    		start = list.size() - (list.size() % 10);
+    		end = list.size();
+    	}
+    	
+    	for(int i = 0; i < start; i++) {
+    		list.remove(0);
+    	}
+    	
+    	for(int i = end; i < size; i++) {
+    		list.remove(list.size() - 1);
+    	}
+	    	
     	return list;
+    }
+    
+    private static class IndexedAudioTrack {
+    	private int index;
+    	private AudioTrack track;
+    	
+		public IndexedAudioTrack(int index, AudioTrack track) {
+			this.index = index;
+			this.track = track;
+		}
+		
+		public int getIndex() {
+			return index;
+		}
+		
+		public AudioTrack getTrack() {
+			return track;
+		}
     }
 }

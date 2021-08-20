@@ -1,5 +1,6 @@
 package music;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,12 @@ public class PlayerManager {
 		});
 	}
 	
+	public List<Long> guilds() {
+		List<Long> list = new ArrayList<Long>();
+		list.addAll(musicManager.keySet());
+		return list;
+	}
+	
 	public void loadAndPlay(TextChannel channel, String track) {
 		GuildMusicManager guildMusicManager = getMusicManager(channel.getGuild());
 		audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler() {
@@ -79,14 +86,13 @@ public class PlayerManager {
 
 			@Override
 			public void noMatches() {
-				// TODO Auto-generated method stub
+				channel.sendMessage("Track could not be found.").queue();
 				
 			}
 
 			@Override
 			public void loadFailed(FriendlyException exception) {
-				// TODO Auto-generated method stub
-				
+				channel.sendMessage("Track failed to load.").queue();
 			}
 			
 		});

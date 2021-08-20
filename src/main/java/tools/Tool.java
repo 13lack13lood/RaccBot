@@ -58,8 +58,10 @@ public class Tool {
 	public static String convertTime(long n) {
 		long seconds = n / 1000;
 		long minutes = seconds / 60;
+		long hours = minutes / 60;
 		seconds -= (minutes * 60);
-		return Long.toString(minutes) + ":" + Long.toString(seconds);
+		minutes -= (hours * 60);
+		return Long.toString(hours) + Long.toString(minutes) + ":" + Long.toString(seconds);
 	}
 	// Search through the list to find the channel
 	public static GuildChannel searchChannel(List<GuildChannel> list, String pattern) {
@@ -111,7 +113,7 @@ public class Tool {
 
 		return null;
 	}
-	
+	// Check if command is used in a certain channel
 	public static boolean checkMusicCommandChannel(GuildMessageReceivedEvent event) {
 		long serverid = event.getGuild().getIdLong();
 		if(BotConfig.getMusicChannels(serverid) != null && event.getChannel().getIdLong() != BotConfig.getMusicChannels(serverid)) {
@@ -120,4 +122,5 @@ public class Tool {
 		}
 		return true;
 	}
+
 }

@@ -11,16 +11,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 public class TrackScheduler extends AudioEventAdapter {
 	private AudioPlayer player;
 	private BlockingQueue<AudioTrack> queue;
+	private boolean repeat;
 	
 	public TrackScheduler(AudioPlayer player) {
 		this.player = player;
 		queue = new LinkedBlockingQueue<>();
+		repeat = false;
 	}
 	
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		// Check if the current 
 		if(endReason.mayStartNext) {
-			nextTrack();
+			if(repeat) {
+				player.startTrack(track.makeClone(), false);
+			} else {
+				nextTrack();
+			}
 		}
 	}
 	
@@ -46,5 +52,19 @@ public class TrackScheduler extends AudioEventAdapter {
 	// Get the whole queue
 	public BlockingQueue<AudioTrack> getQueue() {
 		return queue;
+	}
+	
+	public void destroy() {
+		clear();
+		repeat = false;
+		player.destroy();
+	}
+	
+	public void setRepeat(boolean loop) {
+		repeat = loop;
+	}
+	
+	public boolean isRepeat() {
+		return repeat;
 	}
 }

@@ -20,7 +20,8 @@ public class BotConfig {
 	private static Map<String, String> data = new HashMap<String, String>();
 	// Map to store music channels
 	private static Map<Long, Long> musicChannels = new HashMap<Long, Long>();
-	
+	// String[] to store all the commands
+	public static String[] BOTCOMMANDS;
 	// Method to read the file
 	public static void init() {
 		try { // Read settings.botconfig
@@ -64,6 +65,8 @@ public class BotConfig {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		BOTCOMMANDS = getBotCommands();
 	}
 	
 	// Method to retrieve data
@@ -120,5 +123,43 @@ public class BotConfig {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	/**
+	 * get all the commands that the bot has
+	 * @return array[0] = normal commands
+	 * <p>
+	 * array[1] = music commands
+	 * <p>
+	 * array[2] = misc commands
+	 */
+	private static String[] getBotCommands() {
+		String[] commands = new String[3]; // [0] is commands, [1] is music, [2] is misc
+		
+		for(int i = 0; i < commands.length; i++) {
+			commands[i] = "";
+		}
+		
+		File folder = new File("./src/main/java/commands");
+		File[] files = folder.listFiles();
+		// Get all the files, add to the corresponding string
+		for(File file : files) {
+			String name = file.getName().toLowerCase().replaceAll(".java", "");
+			if(name.startsWith("music")) {
+				name = name.substring(5) + ", ";
+				commands[1] += name;
+			} else if(name.startsWith("misc")) {
+				name = name.substring(4) + ", ";
+				commands[2] += name;
+			} else {
+				commands[0] += name + ", ";
+			}
+		}
+		// remove trailing comma + space
+		commands[0] = commands[0].substring(0, commands[0].length() - 2);
+		commands[1] = commands[1].substring(0, commands[1].length() - 2);
+		commands[2] = commands[2].substring(0, commands[2].length() - 2);
+		
+		return commands;
 	}
 }

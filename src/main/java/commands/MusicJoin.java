@@ -1,8 +1,9 @@
-package music;
+package commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import music.PlayerManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -60,6 +61,8 @@ public class MusicJoin extends ListenerAdapter {
 							VoiceChannel userChannel = userVoiceState.getChannel();
 							// Join the channel
 							audioManager.openAudioConnection(userChannel);
+							PlayerManager.getInstance().getMusicManager(event.getGuild());
+							PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setPaused(false);;
 							event.getChannel().sendMessage("Connecting to " + userChannel.getName()).queue();
 							LOGGER.info("{} requested bot to connect to channel: {}", user.getUser().getAsTag(), userChannel.getName());
 						}

@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tools.BotConfig;
 
-public class Invite extends ListenerAdapter {
-	private static Logger LOGGER = LoggerFactory.getLogger(Invite.class);
+public class MiscInvite extends ListenerAdapter {
+	private static Logger LOGGER = LoggerFactory.getLogger(MiscInvite.class);
 	
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		// Split the message by space

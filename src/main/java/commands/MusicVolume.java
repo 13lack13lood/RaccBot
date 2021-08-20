@@ -1,33 +1,33 @@
-package music;
+package commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tools.BotConfig;
 import tools.Tool;
 
-public class MusicPlay extends ListenerAdapter {
-	private static Logger LOGGER = LoggerFactory.getLogger(MusicPlay.class);
+public class MusicVolume extends ListenerAdapter {
+	private static Logger LOGGER = LoggerFactory.getLogger(MusicVolume.class);
 	
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		// Split the message by space
 		String[] args = event.getMessage().getContentRaw().split("\\s+");
 		// Check for prefix
 		if(args[0].equalsIgnoreCase(BotConfig.getData("prefix"))) {
-			if(args[1].equalsIgnoreCase("play") && Tool.checkMusicCommandChannel(event)) {
+			if(args[1].equalsIgnoreCase("volume") && Tool.checkMusicCommandChannel(event)) {
 				if(args.length < 3) {
 					// Usage embed
 					EmbedBuilder usage = new EmbedBuilder();
 					usage.setColor(Tool.randomColor());
-					usage.setTitle("Play Music Command");
-					usage.setDescription("Usage: `" + BotConfig.getData("prefix") + " play [youtube link]`");
-					usage.addField("Tip:", "Bot must be in a voice channel first, use `-r join`", false);
+					usage.setTitle("Music Volume Command");
+					usage.setDescription("Usage: `" + BotConfig.getData("prefix") + " volume [number]`");	
+					usage.addField("Tip:", "Default volume is 100.\nMax volume is 200.", false);
 					// Send the embed
 					event.getChannel().sendMessageEmbeds(usage.build()).queue();
 					// Clear builder to save resources
@@ -35,7 +35,6 @@ public class MusicPlay extends ListenerAdapter {
 					
 					LOGGER.info("{} [{}] - help", event.getAuthor().getAsTag(), args[1]);
 				} else {
-					TextChannel channel = event.getChannel();
 					Member self = event.getGuild().getSelfMember();
 					GuildVoiceState selfVoiceState = self.getVoiceState();
 					
@@ -44,21 +43,22 @@ public class MusicPlay extends ListenerAdapter {
 					} else {
 						Member member = event.getMember();
 						GuildVoiceState memberVoiceState = member.getVoiceState();
-						
+						// Check if user is in voice chanel
 						if(!memberVoiceState.inVoiceChannel()) {
 							event.getChannel().sendMessage("You need to be in a voice channel.").queue();
-						} else if(!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
+						} else if(!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) { // Check if user is in the same voice channel as the bot
 							event.getChannel().sendMessage("You need to be in the same voice channel as me.").queue();
 						} else {
 							try {
-								PlayerManager.getInstance().loadAndPlay(channel, args[2]);
-								LOGGER.info("{} [{}] song:", event.getAuthor().getAsTag(), args[1], Tool.combine(args, 2));
-							} catch(Exception e) {
-								event.getChannel().sendMessage("bruh that aint a link").queue();
+								PlayerManager.getInstance().getMusicManager(member.getGuild()).audioPlayer.setVolume(((Integer.parseInt(args[2]) > 200) ? 200 : Integer.parseInt(args[2])));
+								event.getChannel().sendMessage("Changing volume to " + ((Integer.parseInt(args[2]) > 200) ? 200 : Integer.parseInt(args[2]))).queue();
+								LOGGER.info("{} [{}] changed to [{}]", event.getAuthor().getAsTag(), args[1], args[2]);
+							} catch (NumberFormatException e) { // Catch error if user does not give integer
+								event.getChannel().sendMessage("bruh give me an integer.").queue();
+								LOGGER.warn("{} [{}] - attempted to change the volume with a non-integer", event.getAuthor().getAsTag(), args[1]);
 							}
 						}
 					}
-
 				}
 			}
 		}

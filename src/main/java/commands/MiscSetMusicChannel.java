@@ -1,4 +1,4 @@
-package music;
+package commands;
 
 import java.util.EnumSet;
 
@@ -15,8 +15,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tools.BotConfig;
 import tools.Tool;
 
-public class SetMusicChannel extends ListenerAdapter {
-	private static Logger LOGGER = LoggerFactory.getLogger(SetMusicChannel.class);
+public class MiscSetMusicChannel extends ListenerAdapter {
+	private static Logger LOGGER = LoggerFactory.getLogger(MiscSetMusicChannel.class);
 	
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		// Split the message by space

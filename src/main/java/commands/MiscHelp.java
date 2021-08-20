@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tools.BotConfig;
 import tools.Tool;
 
-public class Help extends ListenerAdapter {
-	private static Logger LOGGER = LoggerFactory.getLogger(Help.class);
+public class MiscHelp extends ListenerAdapter {
+	private static Logger LOGGER = LoggerFactory.getLogger(MiscHelp.class);
 	
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		// Split the message by space
@@ -24,10 +24,12 @@ public class Help extends ListenerAdapter {
 				EmbedBuilder help = new EmbedBuilder();
 				help.setTitle("RaccBot Info");
 				help.setDescription("Help menu for a dog shit bot");
-				help.addField("Prefix", BotConfig.getData("prefix"), false);
-				help.addField("Main Commands:", "help, userinfo, serverinfo, serverchannels, serverroles, clear, channelinfo, roleinfo", false);
-				help.addField("Random Commands:", "echo, dice, coin", false);
-				help.addField("Admin Commands:", "test", false);
+				help.addField("Prefix:", BotConfig.getData("prefix"), false);
+				
+				String[] commands = BotConfig.BOTCOMMANDS;
+				help.addField("Main Commands:", commands[0], false);
+				help.addField("Music Commands:", commands[1], false);
+				help.addField("Misc commands:", commands[2], false);
 				help.addField("More info about a command: ", "usually `" + BotConfig.getData("prefix") + " [command]` or __**sometimes**__ `" + BotConfig.getData("prefix") + " [command] help`", false);
 				help.setFooter("Creator: 13lack13lood");
 				help.setColor(Tool.randomColor());

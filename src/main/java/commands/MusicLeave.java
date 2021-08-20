@@ -1,8 +1,9 @@
-package music;
+package commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import music.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
