@@ -47,7 +47,7 @@ public class Main {
 		BotConfig.init();
 		LOGGER.info("Bot Configurations loaded.");
 		// Start the bot
-		JDABuilder builder = JDABuilder.createDefault(BotConfig.getData("token"));
+		JDABuilder builder = JDABuilder.createDefault(BotConfig.getToken());
 		LOGGER.info("JDABuilder initialized.");
 		// Enable intent
 		builder.enableIntents(GatewayIntent.GUILD_PRESENCES);

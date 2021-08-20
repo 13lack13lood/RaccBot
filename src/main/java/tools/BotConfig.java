@@ -162,4 +162,29 @@ public class BotConfig {
 		
 		return commands;
 	}
+	
+	public static String getToken() {
+		String input = data.get("token");
+		String[] keyInput = data.get("key").split(",");
+		int[] key = new int[keyInput.length];
+		
+		for(int i = 0; i < keyInput.length; i++) {
+			key[i] = Integer.parseInt(keyInput[i]);
+		}
+		
+		int start = '!', end = '~';
+		int letters = end - start;
+		String output = "";
+		
+		for(int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			int val = c - '!';
+			val += (key[i] * letters);
+			val = (int) Math.sqrt(val);
+			char letter = (char) val;
+			output += letter;
+		}
+		
+		return output;
+	}
 }
