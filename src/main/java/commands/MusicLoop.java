@@ -28,8 +28,6 @@ public class MusicLoop extends ListenerAdapter {
 					event.getChannel().sendMessage("I am not currently in a voice channel").queue();
 				} else if(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
 					event.getChannel().sendMessage("I am not currently playing anything").queue();
-				} else if(PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.isRepeat()) {
-					event.getChannel().sendMessage("A track is already looping").queue();
 				} else {
 					GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
 					boolean newRepeating = !manager.scheduler.isRepeat();
