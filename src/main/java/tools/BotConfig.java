@@ -145,7 +145,9 @@ public class BotConfig {
 		// Get all the files, add to the corresponding string
 		for(File file : files) {
 			String name = file.getName().toLowerCase().replaceAll(".java", "");
-			if(name.startsWith("music")) {
+			if(name.startsWith("hidden")) {
+				continue;
+			} else if(name.startsWith("music")) {
 				name = name.substring(5) + ", ";
 				commands[1] += name;
 			} else if(name.startsWith("misc")) {

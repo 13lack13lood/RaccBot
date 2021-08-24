@@ -34,7 +34,7 @@ public class MiscHelp extends ListenerAdapter {
 				help.setFooter("Creator: 13lack13lood");
 				help.setColor(Tool.randomColor());
 				// Send embed
-				event.getChannel().sendMessageEmbeds(help.build()).queue();
+				event.getChannel().sendMessageEmbeds(help.build()).submit();
 				// Save resources by clearing builder
 				help.clear();
 				

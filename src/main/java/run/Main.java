@@ -10,8 +10,11 @@ import commands.Clear;
 import commands.Coin;
 import commands.Dice;
 import commands.Echo;
+import commands.HiddenHomework;
 import commands.MiscHelp;
 import commands.MiscInvite;
+import commands.MiscSetMusicChannel;
+import commands.MiscShutdown;
 import commands.MusicJoin;
 import commands.MusicLeave;
 import commands.MusicLoop;
@@ -27,8 +30,6 @@ import commands.RoleInfo;
 import commands.ServerChannels;
 import commands.ServerInfo;
 import commands.ServerRoles;
-import commands.MiscShutdown;
-import commands.MiscSetMusicChannel;
 import commands.UserInfo;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -87,6 +88,7 @@ public class Main {
 		builder.addEventListeners(new ChannelInfo()); // ChannelInfo command
 		builder.addEventListeners(new RoleInfo()); // RoleInfo command
 		builder.addEventListeners(new MiscInvite()); // Invite command
+		builder.addEventListeners(new HiddenHomework()); // Olympiads homework command
 		// Music commands
 		builder.addEventListeners(new MusicJoin()); // Join voice channel command
 		builder.addEventListeners(new MusicLeave()); // Leave voice channel command
