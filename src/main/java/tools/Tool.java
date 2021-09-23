@@ -122,5 +122,23 @@ public class Tool {
 		}
 		return true;
 	}
+	
+	// Get video id from youtube video for thumbnail
+	public static String getVideoID(String url) {
+		String output = "";
+		String validChars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
+		
+		int start = url.indexOf("v=") + 2;
+		
+		for(int i = start; i < url.length(); i++) {
+			if(validChars.indexOf(url.charAt(i)) > -1) {
+				output += url.charAt(i);
+			} else {
+				break;
+			}
+		}
+		
+		return output;
+	}
 
 }

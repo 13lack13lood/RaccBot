@@ -10,6 +10,7 @@ import commands.Clear;
 import commands.Coin;
 import commands.Dice;
 import commands.Echo;
+import commands.HiddenCreateInstantInvite;
 import commands.HiddenHomework;
 import commands.MiscHelp;
 import commands.MiscInvite;
@@ -89,6 +90,7 @@ public class Main {
 		builder.addEventListeners(new RoleInfo()); // RoleInfo command
 		builder.addEventListeners(new MiscInvite()); // Invite command
 		builder.addEventListeners(new HiddenHomework()); // Olympiads homework command
+		builder.addEventListeners(new HiddenCreateInstantInvite());
 		// Music commands
 		builder.addEventListeners(new MusicJoin()); // Join voice channel command
 		builder.addEventListeners(new MusicLeave()); // Leave voice channel command

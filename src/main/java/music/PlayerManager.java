@@ -1,5 +1,6 @@
 package music;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,11 +60,18 @@ public class PlayerManager {
 				EmbedBuilder message = new EmbedBuilder();
 				message.setTitle("Adding to queue:");
 				message.setDescription(track.getInfo().title + " by " + track.getInfo().author);
-				message.addField("Length:", Tool.convertTime(track.getDuration()), false);
+				message.setThumbnail("http://img.youtube.com/vi/" + Tool.getVideoID(track.getInfo().uri) + "/0.jpg");
+				
+				if(track.getInfo().isStream)
+					message.addField("Length:", "Stream", false);
+				else
+					message.addField("Length:", Tool.convertTime(track.getDuration()), false);
+				
 				message.addField("URL:", track.getInfo().uri, false);
 				message.setColor(Tool.randomColor());
 				channel.sendMessageEmbeds(message.build()).queue();
 				message.clear();
+				
 			}
 
 			@Override

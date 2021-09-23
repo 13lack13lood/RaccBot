@@ -1,6 +1,7 @@
 package commands;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,9 @@ public class Clear extends ListenerAdapter {
 						// Success message
 						event.getChannel().sendMessage("Messages successfully deleted.").queue();
 						event.getMessage().delete().queue();
+						
+						messages = event.getChannel().getHistory().retrievePast(1).complete();
+						event.getChannel().deleteMessages(messages).queueAfter(1000, TimeUnit.MILLISECONDS);
 						
 						LOGGER.info("{} [{}]", event.getAuthor().getAsTag(), args[1]);
 					} catch(IllegalArgumentException e) {
