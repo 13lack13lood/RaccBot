@@ -69,7 +69,7 @@ public class Tool {
 			return null;
 		// Loop through all the channels
 		for(GuildChannel c : list) {
-			if(c.getName().toLowerCase().contains(pattern.toLowerCase())) {
+			if(c.getName().toLowerCase().contains(pattern.toLowerCase()) && c.getName().length() * 0.6 <= pattern.length()) {
 				return c;
 			}
 		}

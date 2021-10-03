@@ -47,7 +47,7 @@ public class ChannelInfo extends ListenerAdapter {
 						info.setColor(Tool.randomColor());
 						info.setThumbnail(event.getMessage().getGuild().getIconUrl());
 						info.setTitle("Information on the Channel " + channel.getName());
-						info.addField("Category:", channel.getType() == ChannelType.CATEGORY ? channel.getName() : channel.getParent().getName(), false);
+						info.addField("Category:", channel.getType() == ChannelType.CATEGORY ? channel.getName() : channel.getParent() == null ? "None" : channel.getParent().getName(), false);
 						info.addField("Type:", channel.getType().toString(), false);
 						info.addField("Permissions Denied:", permissionsDenied(channel.getPermissionOverrides()), false);
 						info.addField("Permissions Allowed:", permissionsAllowed(channel.getPermissionOverrides()), false);
